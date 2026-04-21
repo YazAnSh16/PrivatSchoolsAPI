@@ -1,0 +1,6 @@
+@PrivatSchoolsAPI_HostAddress = http://localhost:5036
+
+GET {{PrivatSchoolsAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
