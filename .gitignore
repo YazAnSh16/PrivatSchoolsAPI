@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/PrivatSchoolsAPI/appsettings.json
+/PrivatSchoolsAPI/wwwroot/images/a2f2c984-caa2-4fbd-b571-999e9dc7df3e.jpg
+/PrivatSchoolsAPI/wwwroot/images/a6b5f050-8787-48e7-9375-218397052612.png

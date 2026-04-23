@@ -1,10 +1,12 @@
-﻿using CQRS_LB.CQRS.Commands;
-using CQRS_LB.CQRS.DTOs;
-using CQRS_LB.CQRS.Queries;
-using CQRS_LB.Data.Models;
-using CQRS_LB.Repos;
+﻿using Application.Features.Students.Command.AddStudent;
+using Application.Features.Students.Command.DeleteStuden;
+using Application.Features.Students.Command.UpdateStudent;
+using Application.Features.Students.Queries.GetAllStudents;
+using Application.Features.Students.Queries.GetStudentById;
+
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PrivatSchoolsAPI.API.Requests.Student;
 
 namespace PrivatSchoolsAPI.Controllers
 {
@@ -12,13 +14,13 @@ namespace PrivatSchoolsAPI.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
-        public StudentController(IRepo<Student> repo, IMediator mediator)
+        public StudentController(IMediator mediator)
         {
-            _repo = repo;
+
             _mediator = mediator;
 
         }
-        private readonly IRepo<Student> _repo;
+
         private readonly IMediator _mediator;
 
 
@@ -26,15 +28,24 @@ namespace PrivatSchoolsAPI.Controllers
         /// Get all students from the system
         /// </summary>
         /// <returns>A list of all students</returns>
-
         [HttpGet]
         public async Task<IActionResult> GetAllStudents()
         {
             //var students = await _repo.GetAll().ToListAsync();
             //return Ok(students);
             var result = await _mediator.Send(new GetAllStudentsQuery());
+
+
             return Ok(result);
         }
+
+        /// <summary>
+        /// Get student by ID
+        /// </summary>
+        /// <param name="id">Student unique identifier</param>
+        /// <returns>Student details</returns>
+        /// <response code="200">Student found</response>
+        /// <response code="404">Student not found</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentById(int id)
         {
@@ -43,16 +54,66 @@ namespace PrivatSchoolsAPI.Controllers
                 return NotFound();
             return Ok(result);
         }
-        [HttpPost]
-        public async Task<IActionResult> AddStudent(DtoNewStudent student)
-        {
-            //await _repo.Add(student);
-            //return Ok(student);
 
-            var results = await _mediator.Send(new AddNewStudentCommand(student));
+        /// <summary>
+        /// Create a new student
+        /// </summary>
+        /// <param name="student">Student creation data</param>
+        /// <returns>Created student</returns>
+        /// <response code="200">Student created successfully</response>
+        /// <response code="400">Invalid input</response>
+        [HttpPost]
+        public async Task<IActionResult> AddStudent([FromForm] AddStudentRequest student)
+        {
+
+            string ProfileImageUrl = null;
+
+            if (student.StudentImage != null)
+            {
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                var fileName = Guid.NewGuid() + Path.GetExtension(student.StudentImage.FileName);
+                var fullPath = Path.Combine(folderPath, fileName);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await student.StudentImage.CopyToAsync(stream);
+                }
+
+                ProfileImageUrl = "/images/" + fileName;
+            }
+            var command = new AddStudentCommand(
+
+                student.StudentName,
+                student.StudentBirthPlace,
+                student.StudentBirthDate,
+                student.StudentAddress,
+                student.StudentFatherJob,
+                student.StudentMotherJob,
+                student.StudentPhoneNumber,
+                student.StudentMotherPhone,
+                student.StudentFatherPhone,
+                student.StudentHomePhone,
+                student.StudentGrade9,
+                student.StudentGrade11,
+                ProfileImageUrl
+                );
+
+
+            var results = await _mediator.Send(command);
             return Ok(results);
 
         }
+
+        /// <summary>
+        /// Delete a student by ID
+        /// </summary>
+        /// <param name="id">Student ID</param>
+        /// <response code="200">Student removed successfully</response>
+        /// <response code="404">Student not found</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStudent(int id)
         {
@@ -62,10 +123,55 @@ namespace PrivatSchoolsAPI.Controllers
                 return NotFound();
             return Ok("removed"); // 200
         }
+
+        /// <summary>
+        /// Update student information
+        /// </summary>
+        /// <param name="id">Student ID</param>
+        /// <param name="student">Updated student data</param>
+        /// <response code="200">Student updated successfully</response>
+        /// <response code="404">Student not found</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStudent(int id, DtoUpdateStudent student)
+        public async Task<IActionResult> UpdateStudent(int id, [FromForm] UpdateStudentRequest student)
         {
-            var result = await _mediator.Send(new UpdateStudentCommand(id, student));
+            string? profileImageUrl = student.profileImageUrl;
+
+            // إذا المستخدم رفع صورة جديدة
+            if (student.profileImageUrl != null)
+            {
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                var fileName = Guid.NewGuid() + Path.GetExtension(student.StudentImage.FileName);
+                var fullPath = Path.Combine(folderPath, fileName);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await student.StudentImage.CopyToAsync(stream);
+
+                }
+
+                profileImageUrl = "/images/" + fileName;
+            }
+            var command = new UpdateStudentCommand(
+                id,
+                student.StudentName,
+                student.StudentBirthPlace,
+                student.StudentBirthDate,
+                student.StudentAddress,
+                student.StudentFatherJob,
+                student.StudentMotherJob,
+                student.StudentPhoneNumber,
+                student.StudentMotherPhone,
+                student.StudentFatherPhone,
+                student.StudentHomePhone,
+                student.StudentGrade9,
+                student.StudentGrade11,
+                profileImageUrl
+);
+            var result = await _mediator.Send(command);
             if (!result)
                 return NotFound();
             return Ok("updated");

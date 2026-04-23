@@ -1,6 +1,12 @@
-using CQRS_LB.Data;
+
+using Application.Behaviors;
+using Application.Common;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using PrivatSchoolsAPI.Infrastructure.Data;
 using System.Reflection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +14,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlServer
 (builder.Configuration.GetConnectionString("MyConnection")));
 
-builder.Services.AddScoped(typeof(CQRS_LB.Repos.IRepo<>), typeof(CQRS_LB.Repos.MainRepo<>));
+builder.Services.AddScoped<IAppDbContext>(provider =>
+    provider.GetRequiredService<AppDbContext>());
+
+//builder.Services.AddScoped(typeof(CQRS_LB.Repos.IRepo<>), typeof(CQRS_LB.Repos.MainRepo<>));
 builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssembly(typeof(CQRS_LB.MyLIb).Assembly));
+    cfg.RegisterServicesFromAssembly(typeof(Application.AssemblyMarker).Assembly));
+
+builder.Services.AddValidatorsFromAssembly((typeof(Application.AssemblyMarker).Assembly));
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddControllers();
 
@@ -40,6 +53,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthorization();
 
