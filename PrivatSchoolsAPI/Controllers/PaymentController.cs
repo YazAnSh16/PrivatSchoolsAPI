@@ -41,7 +41,7 @@ namespace PrivatSchoolsAPI.Controllers
         /// <response code="200">Payment found</response>
         /// <response code="404">Payment not found</response>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _mediator.Send(new GetPaymentsByIdQuery(id));
             return Ok(result);
@@ -71,7 +71,7 @@ namespace PrivatSchoolsAPI.Controllers
         /// <response code="204">Deleted successfully</response>
         /// <response code="404">Payment not found</response>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePayment(int id)
+        public async Task<IActionResult> DeletePayment(Guid id)
         {
             var result = await _mediator.Send(new DeletePaymentCommand(id));
 
@@ -89,7 +89,7 @@ namespace PrivatSchoolsAPI.Controllers
         /// <response code="200">Updated successfully</response>
         /// <response code="404">Payment not found</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePayment(int id, UpdatePaymentRequest payment)
+        public async Task<IActionResult> UpdatePayment(Guid id, UpdatePaymentRequest payment)
         {
             var command = new UpdatePaymentCommand(id, payment.Amount, payment.TotalAmount, payment.PaymentDate);
 

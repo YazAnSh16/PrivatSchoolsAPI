@@ -44,7 +44,7 @@ namespace PrivatSchoolsAPI.Controllers
         /// <response code="200">Returns absence records</response>
         /// <response code="404">No records found</response>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAbsenceByStudentId(int id)
+        public async Task<IActionResult> GetAbsenceByStudentId(Guid id)
         {
             var result = await _mediator.Send(new GetAbsenceByStudentIdQuery(id));
             if (result == null)
@@ -61,7 +61,7 @@ namespace PrivatSchoolsAPI.Controllers
         /// <response code="204">Deleted successfully</response>
         /// <response code="404">Record not found</response>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAbsence(int id)
+        public async Task<IActionResult> DeleteAbsence(Guid id)
         {
             var result = await _mediator.Send(new DeleteAbsenceCommand(id));
             if (!result)
@@ -78,7 +78,7 @@ namespace PrivatSchoolsAPI.Controllers
         /// <response code="200">Updated successfully</response>
         /// <response code="404">Record not found</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAbsence(int id, UpdateAbsenceRequest absence)
+        public async Task<IActionResult> UpdateAbsence(Guid id, UpdateAbsenceRequest absence)
         {
 
             var command = new UpdateAbsenceCommand(id, absence.Result, absence.AbsenceDate);

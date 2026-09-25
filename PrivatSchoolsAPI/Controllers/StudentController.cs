@@ -47,7 +47,7 @@ namespace PrivatSchoolsAPI.Controllers
         /// <response code="200">Student found</response>
         /// <response code="404">Student not found</response>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetStudentById(int id)
+        public async Task<IActionResult> GetStudentById(Guid id)
         {
             var result = await _mediator.Send(new GetStudentByIdQuery(id));
             if (result == null)
@@ -137,7 +137,7 @@ namespace PrivatSchoolsAPI.Controllers
             string? profileImageUrl = student.profileImageUrl;
 
             // إذا المستخدم رفع صورة جديدة
-            if (student.profileImageUrl != null)
+            if (student.StudentImage != null)
             {
                 var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
 

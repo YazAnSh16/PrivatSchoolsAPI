@@ -8,7 +8,7 @@ namespace Application.Common
         DbSet<Student> Students { get; }
         DbSet<Payment> Payments { get; }
         DbSet<Absences> Absences { get; }
-        DbSet<Tests> Tests { get; }
+        DbSet<TestResult> TestResults { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

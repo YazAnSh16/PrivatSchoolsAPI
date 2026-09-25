@@ -3,7 +3,7 @@
 namespace Application.Features.Payments.Command.UpdatePayment
 {
     public record UpdatePaymentCommand(
-        int id, decimal Amount, decimal TotalAmount, DateTime PaymentDate) :
+        Guid id, decimal Amount, decimal TotalAmount, DateTime PaymentDate) :
         IRequest<bool>
     { }
 

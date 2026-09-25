@@ -3,7 +3,7 @@
     public class StudentDetailsResponse
     {
 
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
         public string StudentName { get; set; }
         public string StudentBirthPlace { get; set; }
         public DateTime StudentBirthDate { get; set; }

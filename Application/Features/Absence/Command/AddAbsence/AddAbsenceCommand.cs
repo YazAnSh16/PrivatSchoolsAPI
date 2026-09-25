@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Features.Absence.Command.AddAbsence
 {
-    public record AddAbsenceCommand(bool Result, int StudentId, DateTime AbsenceDate) : IRequest<AbsenceDetailsRespones>
+    public record AddAbsenceCommand(bool Result, Guid StudentId, DateTime AbsenceDate) : IRequest<AbsenceDetailsRespones>
     {
 
     }

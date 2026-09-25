@@ -1,7 +1,9 @@
 
 using Application.Behaviors;
 using Application.Common;
+using Application.Services;
 using FluentValidation;
+using Infrastructure.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrivatSchoolsAPI.Infrastructure.Data;
@@ -25,7 +27,17 @@ builder.Services.AddValidatorsFromAssembly((typeof(Application.AssemblyMarker).A
 
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("RedisConStr");
+    options.InstanceName = "Redis_";
+
+});
+
+
+builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 
 //// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
@@ -59,5 +71,9 @@ app.UseStaticFiles();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

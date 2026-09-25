@@ -14,7 +14,7 @@ namespace PrivatSchoolsAPI.Application.Features.Payments.Command.AddPayment
             _context = context;
         }
         private readonly IAppDbContext _context;
-        public Task<PaymentDetailsResponse> Handle(AddPaymentCommand request, CancellationToken cancellationToken)
+        public async Task<PaymentDetailsResponse> Handle(AddPaymentCommand request, CancellationToken cancellationToken)
         {
             var payment = new Payment
             {
@@ -24,16 +24,16 @@ namespace PrivatSchoolsAPI.Application.Features.Payments.Command.AddPayment
             };
 
             _context.Payments.Add(payment);
-            _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
-            return Task.FromResult(new PaymentDetailsResponse
+            return new PaymentDetailsResponse
             {
                 PaymentId = payment.Id,
                 Amount = payment.Amount,
                 StudentId = payment.StudentId,
                 PaymentDate = payment.PaymentDate,
                 TotalAmount = payment.TotalAmount
-            });
+            };
         }
     }
 }

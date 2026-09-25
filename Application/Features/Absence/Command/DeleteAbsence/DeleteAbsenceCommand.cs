@@ -2,7 +2,7 @@
 
 namespace CQRS_LB.CQRS.Commands
 {
-    public record DeleteAbsenceCommand(int Id) : IRequest<bool>
+    public record DeleteAbsenceCommand(Guid Id) : IRequest<bool>
     {
     }
 }

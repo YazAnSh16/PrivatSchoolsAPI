@@ -25,7 +25,7 @@ namespace Application.Features.Absence.Command.UpdateAbsence
                 absence.AbsenceDate = request.AbsenceDate;
                 absence.Result = request.Result;
 
-                _context.SaveChangesAsync(cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
                 return true;
             }
 

@@ -2,15 +2,13 @@
 {
     public class Absences
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public bool Result { get; set; }
 
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
 
         public Student Student { get; set; }
-
-
 
         public DateTime AbsenceDate { get; set; }
     }

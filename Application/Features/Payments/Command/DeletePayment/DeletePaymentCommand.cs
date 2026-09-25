@@ -2,5 +2,5 @@
 
 namespace CQRS_LB.CQRS.Commands
 {
-    public record DeletePaymentCommand(int Id) : IRequest<bool>;
+    public record DeletePaymentCommand(Guid Id) : IRequest<bool>;
 }

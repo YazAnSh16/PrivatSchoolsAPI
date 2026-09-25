@@ -2,11 +2,11 @@
 {
     public class AbsenceDetailsRespones
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public bool Result { get; set; }
 
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
 
         public DateTime AbsenceDate { get; set; }
     }

@@ -2,8 +2,8 @@
 {
     public class PaymentDetailsResponse
     {
-        public int PaymentId { get; set; }
-        public int StudentId { get; set; }
+        public Guid PaymentId { get; set; }
+        public Guid StudentId { get; set; }
         public decimal Amount { get; set; }
 
         public decimal TotalAmount { get; set; }

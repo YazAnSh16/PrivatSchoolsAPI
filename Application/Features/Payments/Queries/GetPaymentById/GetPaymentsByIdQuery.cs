@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Features.Payments.Queries.GetPaymentById
 {
-    public record GetPaymentsByIdQuery(int Id) : IRequest<List<PaymentDetailsResponse>>
+    public record GetPaymentsByIdQuery(Guid Id) : IRequest<List<PaymentDetailsResponse>>
     {
 
     }

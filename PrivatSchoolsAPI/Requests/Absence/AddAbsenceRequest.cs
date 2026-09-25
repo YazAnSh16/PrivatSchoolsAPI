@@ -6,7 +6,7 @@
 
         public bool Result { get; set; }
 
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
 
         public DateTime AbsenceDate { get; set; }
     }
