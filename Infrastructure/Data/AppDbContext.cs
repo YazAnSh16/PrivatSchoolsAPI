@@ -14,6 +14,6 @@ namespace PrivatSchoolsAPI.Infrastructure.Data
         public DbSet<Student> Students => Set<Student>();
         public DbSet<Payment> Payments => Set<Payment>();
         public DbSet<Absences> Absences => Set<Absences>();
-        public DbSet<TestResult> Tests => Set<TestResult>();
+        public DbSet<TestResult> TestResults => Set<TestResult>();
     }
 }

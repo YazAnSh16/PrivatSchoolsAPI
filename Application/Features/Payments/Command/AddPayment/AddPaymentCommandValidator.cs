@@ -7,9 +7,9 @@ namespace Application.Features.Payments.Command.AddPayment
         public AddPaymentCommandValidator()
         {
             //     public int StudentId { get; set; }
-            //public decimal Amount { get; set; }
+            //public int Amount { get; set; }
 
-            //public decimal TotalAmount { get; set; }
+            //public int TotalAmount { get; set; }
             RuleFor(x => x.StudentId).NotNull().WithMessage("StudentId is required.");
 
             RuleFor(x => x.Amount)

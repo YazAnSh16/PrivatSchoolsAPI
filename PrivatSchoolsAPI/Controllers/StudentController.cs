@@ -132,7 +132,7 @@ namespace PrivatSchoolsAPI.Controllers
         /// <response code="200">Student updated successfully</response>
         /// <response code="404">Student not found</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStudent(int id, [FromForm] UpdateStudentRequest student)
+        public async Task<IActionResult> UpdateStudent(Guid id, [FromForm] UpdateStudentRequest student)
         {
             string? profileImageUrl = student.profileImageUrl;
 

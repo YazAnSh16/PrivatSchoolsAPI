@@ -24,11 +24,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("PrivatSchoolsAPI.Domain.Entities.Absences", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("AbsenceDate")
                         .HasColumnType("datetime2");
@@ -36,8 +34,8 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("Result")
                         .HasColumnType("bit");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -48,23 +46,21 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("PrivatSchoolsAPI.Domain.Entities.Payment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Amount")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("TotalAmount")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -75,11 +71,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("PrivatSchoolsAPI.Domain.Entities.Student", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -130,37 +124,30 @@ namespace Infrastructure.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("PrivatSchoolsAPI.Domain.Entities.Tests", b =>
+            modelBuilder.Entity("PrivatSchoolsAPI.Domain.Entities.TestResult", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Result")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StudentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId1")
-                        .HasColumnType("int");
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("TestDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TestSubject")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TestSubject")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId1");
+                    b.HasIndex("StudentId");
 
-                    b.ToTable("Tests");
+                    b.ToTable("TestResults");
                 });
 
             modelBuilder.Entity("PrivatSchoolsAPI.Domain.Entities.Absences", b =>
@@ -185,11 +172,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("PrivatSchoolsAPI.Domain.Entities.Tests", b =>
+            modelBuilder.Entity("PrivatSchoolsAPI.Domain.Entities.TestResult", b =>
                 {
                     b.HasOne("PrivatSchoolsAPI.Domain.Entities.Student", "Student")
                         .WithMany("Tests")
-                        .HasForeignKey("StudentId1")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

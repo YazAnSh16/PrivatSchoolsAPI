@@ -16,10 +16,4 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\TestResults\Command\UpdateTestResult\" />
-    <Folder Include="Features\TestResults\Queries\GetAllTestResults\" />
-    <Folder Include="Features\TestResults\Queries\GetTestResultById\" />
-  </ItemGroup>
-
 </Project>

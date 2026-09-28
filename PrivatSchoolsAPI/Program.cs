@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrivatSchoolsAPI.Infrastructure.Data;
 using System.Reflection;
+using Scalar.AspNetCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,14 +43,16 @@ builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 //// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+//builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen(c =>
+//{
+//    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+//    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
-    c.IncludeXmlComments(xmlPath);
-});
+//    c.IncludeXmlComments(xmlPath);
+//});
+
+builder.Services.AddOpenApi();
 
 
 var app = builder.Build();
@@ -59,9 +62,10 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+
+    // 4. Map the interactive Scalar documentation UI
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();

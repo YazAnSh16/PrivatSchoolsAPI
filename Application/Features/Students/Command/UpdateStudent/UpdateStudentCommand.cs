@@ -2,7 +2,7 @@
 
 namespace Application.Features.Students.Command.UpdateStudent
 {
-    public record UpdateStudentCommand(int Id,
+    public record UpdateStudentCommand(Guid Id,
     string StudentName,
     string StudentBirthPlace,
     DateTime StudentBirthDate,

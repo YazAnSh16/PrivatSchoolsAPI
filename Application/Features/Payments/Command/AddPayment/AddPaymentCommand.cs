@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Features.Payments.Command.AddPayment
 {
-    public record AddPaymentCommand(Guid StudentId, decimal Amount, decimal TotalAmount) : IRequest<PaymentDetailsResponse>
+    public record AddPaymentCommand(Guid StudentId, int Amount, int TotalAmount) : IRequest<PaymentDetailsResponse>
     {
     }
 }

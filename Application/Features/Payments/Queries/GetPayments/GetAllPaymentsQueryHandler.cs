@@ -4,7 +4,7 @@ using Application.Features.Payments.Responses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace CQRS_LB.CQRS.Handelers
+namespace Application.Features.Payments.Queries.GetPayments
 {
     public class GetAllPaymentsQueryHandler : IRequestHandler<GetAllPaymentsQuery, List<AllPaymentsDetailsResponse>>
     {
@@ -30,6 +30,7 @@ namespace CQRS_LB.CQRS.Handelers
                 })
             .ToListAsync();
             return result;
+            
 
         }
 

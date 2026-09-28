@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class addTestResult : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,7 @@ namespace Infrastructure.Migrations
                 name: "Students",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BirthPlace = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -29,7 +28,7 @@ namespace Infrastructure.Migrations
                     HomePhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Grade9 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Grade11 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProfilePicture = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ProfileImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -41,10 +40,9 @@ namespace Infrastructure.Migrations
                 name: "Absences",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Result = table.Column<bool>(type: "bit", nullable: false),
-                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AbsenceDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -62,11 +60,10 @@ namespace Infrastructure.Migrations
                 name: "Payments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    TotalAmount = table.Column<int>(type: "int", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -81,23 +78,21 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tests",
+                name: "TestResults",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TestSubject = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TestSubject = table.Column<int>(type: "int", nullable: false),
                     Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StudentId1 = table.Column<int>(type: "int", nullable: false)
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tests", x => x.Id);
+                    table.PrimaryKey("PK_TestResults", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tests_Students_StudentId1",
-                        column: x => x.StudentId1,
+                        name: "FK_TestResults_Students_StudentId",
+                        column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -114,9 +109,9 @@ namespace Infrastructure.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tests_StudentId1",
-                table: "Tests",
-                column: "StudentId1");
+                name: "IX_TestResults_StudentId",
+                table: "TestResults",
+                column: "StudentId");
         }
 
         /// <inheritdoc />
@@ -129,7 +124,7 @@ namespace Infrastructure.Migrations
                 name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "Tests");
+                name: "TestResults");
 
             migrationBuilder.DropTable(
                 name: "Students");
