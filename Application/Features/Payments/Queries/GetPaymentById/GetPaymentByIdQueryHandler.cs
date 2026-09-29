@@ -23,6 +23,8 @@ namespace Application.Features.Payments.Queries.GetPaymentById
            StudentId = p.StudentId,
            Amount = p.Amount,
            TotalAmount = p.TotalAmount,
+           PaidAmount = p.PaidAmount,
+           RemainingAmount = p.TotalAmount - p.PaidAmount ,
            PaymentDate = p.PaymentDate
        })
        .ToList();

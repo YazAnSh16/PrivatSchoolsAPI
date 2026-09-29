@@ -40,10 +40,10 @@ namespace PrivatSchoolsAPI.Controllers
         /// <returns>Payment details</returns>
         /// <response code="200">Payment found</response>
         /// <response code="404">Payment not found</response>
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{StudentId}")]
+        public async Task<IActionResult> GetById(Guid StudentId)
         {
-            var result = await _mediator.Send(new GetPaymentsByIdQuery(id));
+            var result = await _mediator.Send(new GetPaymentsByIdQuery(StudentId));
             return Ok(result);
         }
 

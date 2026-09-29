@@ -26,6 +26,8 @@ namespace Application.Features.Payments.Queries.GetPayments
                     StudentName = p.Student.Name,
                     Amount = p.Amount,
                     TotalAmount = p.TotalAmount,
+                    PaidAmount = p.PaidAmount,
+                    RemainingAmount = (p.TotalAmount - p.PaidAmount),
                     PaymentDate = p.PaymentDate
                 })
             .ToListAsync();

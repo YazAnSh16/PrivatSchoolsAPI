@@ -490,7 +490,7 @@
     }
 
     // ===================== Modals: payment =====================
-    function openPaymentModal(payment) {
+    async function openPaymentModal(payment) {
         const isEdit = !!payment && payment.paymentId != null;
         $("#payment-modal-title").textContent = isEdit ? "Edit Payment" : "Add Payment";
 
@@ -512,18 +512,31 @@
         $("#payment-amount").value = isEdit ? payment.amount : "";
         $("#payment-total").value = isEdit ? payment.totalAmount : "";
 
-        if (!isEdit && !state.students.length) {
-            toast("Add a student first", "error");
-            return;
+        if (!isEdit) {
+            if (!state.students.length) {
+                toast("Loading students...", "info");
+                try {
+                    const students = await Api.getStudents();
+                    state.students = (Array.isArray(students) ? students : []).map(normalizeStudent);
+                } catch (err) {
+                    toast(err.message, "error");
+                    return;
+                }
+            }
+            if (!state.students.length) {
+                toast("Add a student first", "error");
+                return;
+            }
         }
         openModal("payment-modal");
     }
 
     function fillStudentSelect(select, selectedId) {
-        select.innerHTML = state.students.map(function (s) {
-            return '<option value="' + s.studentId + '"' + (s.studentId === selectedId ? " selected" : "") + ">" +
-                esc(s.studentName) + "</option>";
-        }).join("");
+        select.innerHTML = '<option value="">-- Select a student --</option>' +
+            state.students.map(function (s) {
+                return '<option value="' + s.studentId + '"' + (s.studentId === selectedId ? " selected" : "") + ">" +
+                    esc(s.studentName) + "</option>";
+            }).join("");
     }
 
     async function submitPayment(e) {
@@ -531,13 +544,14 @@
         const id = $("#payment-id").value;
         const isEdit = !!id;
 
-        if (!isEdit && !$("#payment-student-select").value) {
+        const studentId = Number($("#payment-student-select").value);
+        if (!isEdit && (!studentId || studentId <= 0)) {
             toast("Choose a student", "error");
             return;
         }
 
         const data = {
-            studentId: isEdit ? undefined : Number($("#payment-student-select").value),
+            studentId: isEdit ? undefined : studentId,
             amount: Number($("#payment-amount").value),
             totalAmount: Number($("#payment-total").value),
         };

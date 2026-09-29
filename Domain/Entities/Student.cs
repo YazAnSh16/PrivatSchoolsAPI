@@ -21,9 +21,9 @@
         public string? ProfileImageUrl { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public List<Payment> Payments { get; set; } = new List<Payment>();
-        public List<Absences> Absences { get; set; } = new List<Absences>();
+        public List<Payment>? Payments { get; set; } = new List<Payment>();
+        public List<Absences>? Absences { get; set; } = new List<Absences>();
 
-        public List<TestResult> Tests { get; set; } = new List<TestResult>();
+        public List<TestResult>? Tests { get; set; } = new List<TestResult>();
     }
 }
