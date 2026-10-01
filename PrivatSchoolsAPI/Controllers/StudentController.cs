@@ -1,5 +1,5 @@
 ﻿using Application.Features.Students.Command.AddStudent;
-using Application.Features.Students.Command.DeleteStuden;
+using Application.Features.Students.Command.DeleteStudent;
 using Application.Features.Students.Command.UpdateStudent;
 using Application.Features.Students.Queries.GetAllStudents;
 using Application.Features.Students.Queries.GetStudentById;
@@ -115,7 +115,7 @@ namespace PrivatSchoolsAPI.Controllers
         /// <response code="200">Student removed successfully</response>
         /// <response code="404">Student not found</response>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudent(int id)
+        public async Task<IActionResult> DeleteStudent(Guid id)
         {
 
             var result = await _mediator.Send(new DeleteStudentCommand(id));

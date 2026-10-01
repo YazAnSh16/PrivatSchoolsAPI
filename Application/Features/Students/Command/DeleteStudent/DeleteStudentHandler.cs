@@ -1,6 +1,5 @@
 ﻿
 using Application.Common;
-using Application.Features.Students.Command.DeleteStuden;
 using MediatR;
 
 namespace Application.Features.Students.Command.DeleteStudent
@@ -15,7 +14,7 @@ namespace Application.Features.Students.Command.DeleteStudent
 
         public async Task<bool> Handle(DeleteStudentCommand request, CancellationToken cancellationToken)
         {
-            var student = await _context.Students.FindAsync(request.id);
+            var student = await _context.Students.FindAsync(request.Id);
             if (student == null)
             {
                 return false;

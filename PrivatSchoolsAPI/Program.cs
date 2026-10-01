@@ -7,8 +7,11 @@ using Infrastructure.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PrivatSchoolsAPI.Infrastructure.Data;
+using PrivatSchoolsAPI.Infrastructure.Identity;
 using System.Reflection;
+using Microsoft.AspNetCore.Identity.UI;
 using Scalar.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,10 +20,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlServer
 (builder.Configuration.GetConnectionString("MyConnection")));
 
+builder.Services.AddDefaultIdentity<ApplicationUser>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
+
+builder.Services.AddRazorPages();
+
 builder.Services.AddScoped<IAppDbContext>(provider =>
     provider.GetRequiredService<AppDbContext>());
 
-//builder.Services.AddScoped(typeof(CQRS_LB.Repos.IRepo<>), typeof(CQRS_LB.Repos.MainRepo<>));
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(Application.AssemblyMarker).Assembly));
 
@@ -37,29 +45,12 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 });
 
-
 builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
-
-//// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-//builder.Services.AddOpenApi();
-
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-//    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-//    c.IncludeXmlComments(xmlPath);
-//});
 
 builder.Services.AddOpenApi();
 
-
 var app = builder.Build();
 
-
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -72,6 +63,8 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
@@ -79,5 +72,8 @@ app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Map Razor Pages so Identity UI endpoints are reachable (e.g. /Identity/Account/Login)
+app.MapRazorPages();
 
 app.Run();

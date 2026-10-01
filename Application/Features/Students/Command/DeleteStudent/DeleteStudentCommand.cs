@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
-namespace Application.Features.Students.Command.DeleteStuden
+namespace Application.Features.Students.Command.DeleteStudent
 {
-    public record DeleteStudentCommand(int id) : IRequest<bool>
+    public record DeleteStudentCommand(Guid Id) : IRequest<bool>
     {
     }
 }

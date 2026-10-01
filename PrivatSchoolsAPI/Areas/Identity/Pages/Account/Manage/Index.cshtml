@@ -1,0 +1,22 @@
+@page
+@model PrivatSchoolsAPI.Areas.Identity.Pages.Account.Manage.IndexModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Manage your account";
+}
+
+<h2>Manage your account</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Username</dt>
+        <dd class="col-sm-10">@Model.Username</dd>
+
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.Email</dd>
+    </dl>
+
+    <p>
+        <a asp-page="/Account/Manage/ChangePassword">Change your password</a>
+    </p>
+</div>

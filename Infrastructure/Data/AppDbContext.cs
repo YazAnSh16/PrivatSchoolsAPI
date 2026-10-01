@@ -1,11 +1,13 @@
 ﻿using Application.Common;
+using PrivatSchoolsAPI.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PrivatSchoolsAPI.Domain.Entities;
 
 namespace PrivatSchoolsAPI.Infrastructure.Data
 
 {
-    public class AppDbContext : DbContext, IAppDbContext
+    public class AppDbContext :  IdentityDbContext<ApplicationUser> , IAppDbContext 
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
