@@ -2,25 +2,25 @@
 using Application.Features.Students.Command.AddStudent;
 using Application.Features.Students.Responses;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using PrivatSchoolsAPI.Domain.Entities;
 
 namespace Application.Features.Students.Command
 {
-    public class AddStudentCommandHandler : IRequestHandler<AddStudentCommand, StudentDetailsResponse>
+    public class AddStudentCommandHandler(IAppDbContext context, ICurrentUser user)
+        : IRequestHandler<AddStudentCommand, StudentDetailsResponse>
     {
-        public AddStudentCommandHandler(IAppDbContext context)
+        public async Task<StudentDetailsResponse> Handle(
+            AddStudentCommand request,
+            CancellationToken cancellationToken
+        )
         {
-            _context = context;
-        }
-
-        private readonly IAppDbContext _context;
-
-        public async Task<StudentDetailsResponse> Handle(AddStudentCommand request, CancellationToken cancellationToken)
-        {
+            
             Student student = new()
             {
-
+                Id = Guid.CreateVersion7(),
                 Name = request.StudentName,
+                ApplicationUserId = user.UserId,
                 BirthDate = request.StudentBirthDate,
                 BirthPlace = request.StudentBirthPlace,
                 Address = request.StudentAddress,
@@ -32,11 +32,11 @@ namespace Application.Features.Students.Command
                 HomePhone = request.StudentHomePhone,
                 Grade9 = request.StudentGrade9,
                 Grade11 = request.StudentGrade11,
-                ProfileImageUrl = request.ProfileImageUrl
+                ProfileImageUrl = request.ProfileImageUrl,
             };
 
-            await _context.Students.AddAsync(student);
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.Students.AddAsync(student);
+            await context.SaveChangesAsync(cancellationToken);
 
             return new StudentDetailsResponse
             {
@@ -57,9 +57,4 @@ namespace Application.Features.Students.Command
             };
         }
     }
-
-
-
-
-
 }

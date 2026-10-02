@@ -12,6 +12,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Identity.UI;
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Identity;
+using Infrastructure.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,8 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IAppDbContext>(provider =>
     provider.GetRequiredService<AppDbContext>());
+
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(Application.AssemblyMarker).Assembly));

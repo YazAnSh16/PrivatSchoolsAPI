@@ -23,7 +23,7 @@ namespace Application.Features.TestResults.Command.AddTestResults
             var testResult = new TestResult
 
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.CreateVersion7(),
                 TestDate = request.TestDate,
                 Result = request.Result,
                 StudentId = request.SudentId,

@@ -20,6 +20,7 @@ namespace Application.Features.Absence.Command.AddAbsence
         {
             var absence = new Absences
             {
+                Id = Guid.CreateVersion7(),
                 StudentId = request.StudentId,
                 AbsenceDate = request.AbsenceDate,
                 Result = request.Result

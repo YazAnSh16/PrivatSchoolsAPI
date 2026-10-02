@@ -20,19 +20,19 @@ namespace Application.Features.Students.Command.UpdateStudent
             }
             else
             {
-                student.Name = request.StudentName;
-                student.BirthPlace = request.StudentBirthPlace;
+                student.Name = request.StudentName ?? student.Name;
+                student.BirthPlace = request.StudentBirthPlace ?? student.BirthPlace;
                 student.BirthDate = request.StudentBirthDate;
-                student.Address = request.StudentAddress;
-                student.FatherJob = request.StudentFatherJob;
-                student.MotherJob = request.StudentMotherJob;
-                student.PhoneNumber = request.StudentPhoneNumber;
-                student.MotherPhone = request.StudentMotherPhone;
-                student.FatherPhone = request.StudentFatherPhone;
-                student.HomePhone = request.StudentHomePhone;
-                student.Grade9 = request.StudentGrade9;
-                student.Grade11 = request.StudentGrade11;
-                student.ProfileImageUrl = request.ProfileImageUrl;
+                student.Address = request.StudentAddress ?? student.Address;
+                student.FatherJob = request.StudentFatherJob ?? student.FatherJob;
+                student.MotherJob = request.StudentMotherJob ?? student.MotherJob;
+                student.PhoneNumber = request.StudentPhoneNumber ?? student.PhoneNumber;
+                student.MotherPhone = request.StudentMotherPhone ?? student.MotherPhone;
+                student.FatherPhone = request.StudentFatherPhone ?? student.FatherPhone;
+                student.HomePhone = request.StudentHomePhone ?? student.HomePhone;
+                student.Grade9 = request.StudentGrade9 ?? student.Grade9;
+                student.Grade11 = request.StudentGrade11 ?? student.Grade11;
+                student.ProfileImageUrl = request.ProfileImageUrl ?? student.ProfileImageUrl;
                 _context.Students.Update(student);
                 await _context.SaveChangesAsync(cancellationToken);
                 return true;

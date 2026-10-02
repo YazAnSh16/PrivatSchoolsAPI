@@ -19,18 +19,19 @@ namespace PrivatSchoolsAPI.Application.Features.Payments.Command.AddPayment
         {
             var OldAmount = await _context.Students.Include(s => s.Payments).Where(s => s.Id == request.StudentId).FirstOrDefaultAsync(cancellationToken);
 
-            int x = 0;
+            int OldAmountValue = 0;
 
             foreach (var item in OldAmount.Payments)
             {
-                x += item.Amount;
+                OldAmountValue += item.Amount;
             }
 
 
             var payment = new Payment
             {
+                Id = Guid.CreateVersion7(),
                 Amount = request.Amount,
-                PaidAmount = request.Amount + x,
+                PaidAmount = request.Amount + OldAmountValue,
                 StudentId = request.StudentId,
                 TotalAmount = request.TotalAmount,
             };
