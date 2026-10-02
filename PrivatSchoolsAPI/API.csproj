@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="Views\Management\" />
-    <Folder Include="Views\Student\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

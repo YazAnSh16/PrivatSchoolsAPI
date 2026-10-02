@@ -3,16 +3,17 @@ using Application.Features.Students.Command.DeleteStudent;
 using Application.Features.Students.Command.UpdateStudent;
 using Application.Features.Students.Queries.GetAllStudents;
 using Application.Features.Students.Queries.GetStudentById;
-
+using Application.Features.Students.Queries.GetStudentSummeryById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PrivatSchoolsAPI.API.Requests.Student;
+
 
 namespace PrivatSchoolsAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentController : ControllerBase
+    public class StudentController : Controller
     {
         public StudentController(IMediator mediator)
         {
@@ -39,6 +40,15 @@ namespace PrivatSchoolsAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("Summery/{id}")]
+        public async Task<IActionResult> GetStudentSummeryById(Guid id)
+        {
+            var result = await _mediator.Send(new GetStudentSummeryByIdQuery(id));
+            if (result == null)
+                return NotFound();
+            return Ok(result);
+        }
+
         /// <summary>
         /// Get student by ID
         /// </summary>
@@ -53,6 +63,12 @@ namespace PrivatSchoolsAPI.Controllers
             if (result == null)
                 return NotFound();
             return Ok(result);
+        }
+
+        [HttpGet]
+        public IActionResult AddStudent()
+        {
+            return View();
         }
 
         /// <summary>
@@ -136,7 +152,6 @@ namespace PrivatSchoolsAPI.Controllers
         {
             string? profileImageUrl = student.profileImageUrl;
 
-            // إذا المستخدم رفع صورة جديدة
             if (student.StudentImage != null)
             {
                 var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");

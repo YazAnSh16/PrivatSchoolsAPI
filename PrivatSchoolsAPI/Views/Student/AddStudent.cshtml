@@ -1,0 +1,105 @@
+@{
+    ViewData["Title"] = "إضافة طالب";
+}
+
+<div id="student-add-page">
+
+    <div class="page-head">
+        <h2>إضافة طالب</h2>
+        <a href="/Home/Student" class="btn btn-outline">
+            <i class="bi bi-arrow-right"></i>
+            رجوع إلى الطلاب
+        </a>
+    </div>
+
+    <form id="student-form" class="student-hero" enctype="multipart/form-data">
+        <div class="form-grid">
+            <div class="field">
+                <label for="student-name">اسم الطالب *</label>
+                <input type="text" id="student-name" name="StudentName" autocomplete="off" required />
+            </div>
+
+            <div class="field">
+                <label for="student-birth-place">مكان الميلاد *</label>
+                <input type="text" id="student-birth-place" name="StudentBirthPlace" required />
+            </div>
+
+            <div class="field">
+                <label for="student-birth-date">تاريخ الميلاد *</label>
+                <input type="date" id="student-birth-date" name="StudentBirthDate" required />
+            </div>
+
+            <div class="field">
+                <label for="student-phone">رقم هاتف الطالب</label>
+                <input type="tel" id="student-phone" name="StudentPhoneNumber" />
+            </div>
+
+            <div class="field span-2">
+                <label for="student-address">العنوان</label>
+                <input type="text" id="student-address" name="StudentAddress" />
+            </div>
+
+            <div class="field">
+                <label for="student-father-job">عمل الأب</label>
+                <input type="text" id="student-father-job" name="StudentFatherJob" />
+            </div>
+
+            <div class="field">
+                <label for="student-mother-job">عمل الأم</label>
+                <input type="text" id="student-mother-job" name="StudentMotherJob" />
+            </div>
+
+            <div class="field">
+                <label for="student-father-phone">هاتف الأب</label>
+                <input type="tel" id="student-father-phone" name="StudentFatherPhone" />
+            </div>
+
+            <div class="field">
+                <label for="student-mother-phone">هاتف الأم</label>
+                <input type="tel" id="student-mother-phone" name="StudentMotherPhone" />
+            </div>
+
+            <div class="field">
+                <label for="student-home-phone">هاتف المنزل</label>
+                <input type="tel" id="student-home-phone" name="StudentHomePhone" />
+            </div>
+
+            <div class="field">
+                <label for="student-grade9">الصف التاسع</label>
+                <input type="text" id="student-grade9" name="StudentGrade9" />
+            </div>
+
+            <div class="field">
+                <label for="student-grade11">الصف الحادي عشر</label>
+                <input type="text" id="student-grade11" name="StudentGrade11" />
+            </div>
+
+            <div class="field">
+                <label for="student-image-input">صورة الطالب</label>
+                <input type="file" id="student-image-input" name="StudentImage" accept="image/*" />
+            </div>
+
+            <div class="field">
+                <label>معاينة الصورة</label>
+                <div>
+                    <img id="student-photo-preview" class="photo-preview" alt="معاينة الصورة" hidden />
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" id="student-submit" class="btn btn-primary">
+                <i class="bi bi-check-lg"></i>
+                حفظ الطالب
+            </button>
+            <a href="/Home/Student" class="btn btn-outline">إلغاء</a>
+        </div>
+    </form>
+
+</div>
+
+<div id="toasts" class="toasts"></div>
+
+@section Scripts {
+    <script src="~/js/student-add.js" asp-append-version="true"></script>
+}
