@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PrivatSchoolsAPI.Controllers
@@ -5,6 +6,25 @@ namespace PrivatSchoolsAPI.Controllers
     public class HomeController : Controller
     {
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// صفحة الطلاب — تعرض الطلاب المرتبطين بالمستخدم الحالي
+        /// </summary>
+        [Authorize]
+        public IActionResult Student()
+        {
+            return View();
+        }
+
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        public IActionResult About()
         {
             return View();
         }

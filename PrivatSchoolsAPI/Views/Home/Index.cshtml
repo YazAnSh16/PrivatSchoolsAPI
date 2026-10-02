@@ -1,286 +1,30 @@
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "الرئيسية";
+    var isAuthenticated = User?.Identity?.IsAuthenticated == true;
 }
 
-<div class="app">
-    <aside class="sidebar">
-        <div class="brand">
-            <svg class="brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 10L12 5 2 10l10 5 10-5z"></path>
-                <path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"></path>
-                <path d="M22 10v6"></path>
-            </svg>
-            <div class="brand-text">
-                <h1>Private School</h1>
-                <p>Management System</p>
-            </div>
-        </div>
-
-        <nav class="nav">
-            <button class="nav-item active" data-tab="students">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-                Students
-            </button>
-            <button class="nav-item" data-tab="payments">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="1" y="4" width="22" height="16" rx="2"></rect>
-                    <line x1="1" y1="10" x2="23" y2="10"></line>
-                </svg>
-                Payments
-            </button>
-            <button class="nav-item" data-tab="absences">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
-                Absences
-            </button>
-        </nav>
-    </aside>
-
-    <main class="main">
-        <header class="topbar">
-            <h2 id="page-title">Students</h2>
-            <button id="header-add-btn" class="btn btn-primary">+ Add Student</button>
-        </header>
-
-        <div id="stats" class="stats"></div>
-
-        <section id="view-students" class="view active">
-            <div class="toolbar">
-                <input id="student-search" class="search" type="search" placeholder="Search by name, phone, birthplace or grade..." />
-                <span id="student-count" class="count-label"></span>
-            </div>
-            <div id="student-grid" class="card-grid"></div>
-            <p id="student-empty" class="empty">No students found.</p>
-        </section>
-
-        <section id="view-payments" class="view">
-            <div class="toolbar">
-                <input id="payment-search" class="search" type="search" placeholder="Search by student name..." />
-                <span id="payment-count" class="count-label"></span>
-            </div>
-            <div class="table-wrap">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Student</th>
-                            <th>Amount</th>
-                            <th>Total</th>
-                            <th>Date</th>
-                            <th class="col-actions">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="payment-body"></tbody>
-                </table>
-            </div>
-            <p id="payment-empty" class="empty">No payments found.</p>
-        </section>
-
-        <section id="view-absences" class="view">
-            <div class="toolbar">
-                <label class="field-label" for="absence-student-select">Student</label>
-                <select id="absence-student-select"></select>
-            </div>
-            <div class="table-wrap">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th class="col-actions">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="absence-body"></tbody>
-                </table>
-            </div>
-            <p id="absence-empty" class="empty">Select a student to view their absence records.</p>
-        </section>
-    </main>
-</div>
-
-<!-- Student form modal -->
-<div class="modal" id="student-modal">
-    <div class="modal-overlay" data-close></div>
-    <div class="modal-box">
-        <div class="modal-header">
-            <h3 id="student-modal-title">Add Student</h3>
-            <button class="modal-close" data-close>&times;</button>
-        </div>
-        <form id="student-form" class="modal-body">
-            <input type="hidden" id="student-id" />
-            <input type="hidden" id="student-profile-url" />
-            <div class="photo-row">
-                <img id="student-photo-preview" class="photo-preview" alt="" />
-                <div class="photo-actions">
-                    <label class="btn btn-outline" for="student-image-input">Upload Photo</label>
-                    <input id="student-image-input" name="StudentImage" type="file" accept="image/*" hidden />
-                </div>
-            </div>
-            <div class="form-grid">
-                <div class="field">
-                    <label for="student-name">Student Name *</label>
-                    <input id="student-name" name="StudentName" type="text" required />
-                </div>
-                <div class="field">
-                    <label for="student-birth-place">Birth Place *</label>
-                    <input id="student-birth-place" name="StudentBirthPlace" type="text" required />
-                </div>
-                <div class="field">
-                    <label for="student-birth-date">Birth Date</label>
-                    <input id="student-birth-date" name="StudentBirthDate" type="date" required />
-                </div>
-                <div class="field span-2">
-                    <label for="student-address">Address</label>
-                    <input id="student-address" name="StudentAddress" type="text" />
-                </div>
-                <div class="field">
-                    <label for="student-phone">Phone Number</label>
-                    <input id="student-phone" name="StudentPhoneNumber" type="text" />
-                </div>
-                <div class="field">
-                    <label for="student-home-phone">Home Phone</label>
-                    <input id="student-home-phone" name="StudentHomePhone" type="text" />
-                </div>
-                <div class="field">
-                    <label for="student-mother-phone">Mother Phone</label>
-                    <input id="student-mother-phone" name="StudentMotherPhone" type="text" />
-                </div>
-                <div class="field">
-                    <label for="student-father-phone">Father Phone</label>
-                    <input id="student-father-phone" name="StudentFatherPhone" type="text" />
-                </div>
-                <div class="field">
-                    <label for="student-father-job">Father Job</label>
-                    <input id="student-father-job" name="StudentFatherJob" type="text" />
-                </div>
-                <div class="field">
-                    <label for="student-mother-job">Mother Job</label>
-                    <input id="student-mother-job" name="StudentMotherJob" type="text" />
-                </div>
-                <div class="field">
-                    <label for="student-grade9">Grade 9 Level</label>
-                    <input id="student-grade9" name="StudentGrade9" type="text" />
-                </div>
-                <div class="field">
-                    <label for="student-grade11">Grade 11 Level</label>
-                    <input id="student-grade11" name="StudentGrade11" type="text" />
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn" data-close>Cancel</button>
-                <button type="submit" class="btn btn-primary">Save Student</button>
-            </div>
-        </form>
+<section class="auth-hero">
+    <div class="text-center">
+        <h1 class="auth-greeting">اهلا بكم</h1>
+        <p class="auth-sub">في نظام إدارة معهد المصري</p>
     </div>
-</div>
 
-<!-- Student detail modal -->
-<div class="modal" id="student-detail-modal">
-    <div class="modal-overlay" data-close></div>
-    <div class="modal-box">
-        <div class="modal-header">
-            <h3>Student Details</h3>
-            <button class="modal-close" data-close>&times;</button>
+    @if (isAuthenticated)
+    {
+        <div class="auth-boxes">
+            <a class="auth-box is-primary" asp-controller="Home" asp-action="Student">الذهاب إلى صفحة الطلاب</a>
+            <a class="auth-box" href="/Identity/Account/Manage">إدارة الحساب</a>
         </div>
-        <div class="modal-body" id="student-detail-body"></div>
-    </div>
-</div>
+    }
+    else
+    {
+        <div class="auth-boxes">
+            <a class="auth-box is-primary" href="/Identity/Account/Login">تسجيل الدخول</a>
+            <a class="auth-box" href="/Identity/Account/Register">إنشاء حساب جديد</a>
+        </div>
 
-<!-- Payment modal -->
-<div class="modal" id="payment-modal">
-    <div class="modal-overlay" data-close></div>
-    <div class="modal-box">
-        <div class="modal-header">
-            <h3 id="payment-modal-title">Add Payment</h3>
-            <button class="modal-close" data-close>&times;</button>
+        <div class="text-center">
+            <a class="auth-link" href="/Identity/Account/ForgotPassword">نسيت كلمة المرور؟</a>
         </div>
-        <form id="payment-form" class="modal-body">
-            <input type="hidden" id="payment-id" />
-            <div class="form-grid">
-                <div class="field span-2" id="payment-student-field">
-                    <label for="payment-student-select">Student *</label>
-                    <select id="payment-student-select" required></select>
-                </div>
-                <div class="field">
-                    <label for="payment-amount">Amount *</label>
-                    <input id="payment-amount" name="Amount" type="number" step="0.01" min="0" required />
-                </div>
-                <div class="field">
-                    <label for="payment-total">Total Amount *</label>
-                    <input id="payment-total" name="TotalAmount" type="number" step="0.01" min="0" required />
-                </div>
-                <div class="field span-2" id="payment-date-field">
-                    <label for="payment-date">Payment Date</label>
-                    <input id="payment-date" type="date" />
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn" data-close>Cancel</button>
-                <button type="submit" class="btn btn-primary">Save Payment</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Absence modal -->
-<div class="modal" id="absence-modal">
-    <div class="modal-overlay" data-close></div>
-    <div class="modal-box">
-        <div class="modal-header">
-            <h3 id="absence-modal-title">Add Absence Record</h3>
-            <button class="modal-close" data-close>&times;</button>
-        </div>
-        <form id="absence-form" class="modal-body">
-            <input type="hidden" id="absence-id" />
-            <div class="form-grid">
-                <div class="field span-2" id="absence-student-field">
-                    <label for="absence-form-student-select">Student *</label>
-                    <select id="absence-form-student-select" required></select>
-                </div>
-                <div class="field">
-                    <label for="absence-date">Date *</label>
-                    <input id="absence-date" name="AbsenceDate" type="date" required />
-                </div>
-                <div class="field">
-                    <label for="absence-result">Status</label>
-                    <select id="absence-result" name="Result">
-                        <option value="true">Present</option>
-                        <option value="false">Absent</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn" data-close>Cancel</button>
-                <button type="submit" class="btn btn-primary">Save Record</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Confirm modal -->
-<div class="modal" id="confirm-modal">
-    <div class="modal-overlay" data-close></div>
-    <div class="modal-box modal-sm">
-        <div class="modal-header">
-            <h3>Confirm Deletion</h3>
-            <button class="modal-close" data-close>&times;</button>
-        </div>
-        <div class="modal-body">
-            <p id="confirm-message">Are you sure you want to delete this item?</p>
-            <div class="modal-actions">
-                <button type="button" class="btn" data-close>Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirm-btn">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="toasts" class="toasts"></div>
+    }
+</section>

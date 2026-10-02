@@ -1,54 +1,132 @@
+@using System.Security.Claims
+@{
+    var isAuthenticated = User?.Identity?.IsAuthenticated == true;
+    var currentPath = Context?.Request.Path.Value ?? "";
+    bool IsActive(string action) =>
+        string.Equals(currentPath?.TrimEnd('/'), $"/Home/{action}", StringComparison.OrdinalIgnoreCase);
+}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Private School</title>
-    <link rel="stylesheet" href="~/css/style.css" />
-    <environment include="Development">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-    </environment>
+    <title>@(ViewData["Title"] != null ? ViewData["Title"] + " - " : "")معهد المصري</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap 5.3 RTL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">Private School</a>
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav ms-auto">
-                        @if (User?.Identity?.IsAuthenticated == true)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" href="/Identity/Account/Manage">Account</a>
-                            </li>
-                            <li class="nav-item">
-                                <form method="post" action="/Identity/Account/Logout" class="d-inline">
-                                    <button type="submit" class="btn btn-link nav-link">Logout</button>
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" href="/Identity/Account/Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/Identity/Account/Register">Register</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
+    <!-- ===================== Green header ===================== -->
+    <header class="app-header">
+        <div class="container-fluid app-header-inner">
+            <!-- start (right in RTL) -->
+            <div class="app-header-start">
+                @if (isAuthenticated)
+                {
+                    <span class="d-none d-sm-inline small text-white-50">أهلاً بك</span>
+                }
             </div>
-        </nav>
+
+            <!-- centre -->
+            <a class="app-brand" asp-controller="Home" asp-action="Index">
+                <span class="app-brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 10L12 5 2 10l10 5 10-5z"></path>
+                        <path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"></path>
+                    </svg>
+                </span>
+                <span>معهد المصري</span>
+            </a>
+
+            <!-- end (left in RTL) : notifications + account -->
+            <div class="app-header-end">
+                <button type="button" class="app-bell" id="notifications-btn"
+                        title="الإشعارات" aria-label="الإشعارات">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="app-bell-dot" id="notifications-dot" hidden></span>
+                </button>
+
+                @if (isAuthenticated)
+                {
+                    <form method="post" action="/Identity/Account/Logout" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-ghost">تسجيل الخروج</button>
+                    </form>
+                }
+                else
+                {
+                    <a class="btn btn-ghost" href="/Identity/Account/Login">تسجيل الدخول</a>
+                }
+            </div>
+        </div>
     </header>
 
-    <main class="container mt-4">
+    <!-- ===================== Black nav ===================== -->
+    <nav class="app-nav navbar navbar-expand-md navbar-dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#appNav"
+                    aria-controls="appNav" aria-expanded="false" aria-label="القائمة">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="appNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link @(IsActive("Student") ? "active" : "")"
+                           asp-controller="Home" asp-action="Student">الطلاب</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(IsActive("Dashboard") ? "active" : "")"
+                           asp-controller="Home" asp-action="Dashboard">لوحة التحكم</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(IsActive("About") ? "active" : "")"
+                           asp-controller="Home" asp-action="About">عنوان</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    @if (isAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Identity/Account/Manage">حسابي</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Identity/Account/Register">إنشاء حساب</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Identity/Account/ForgotPassword">نسيت كلمة المرور</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===================== Body ===================== -->
+    <main class="app-main">
         @RenderBody()
     </main>
 
-    <script src="~/js/app.js" asp-append-version="true"></script>
+    <footer class="app-footer">
+        معهد المصري &copy; @DateTime.Now.Year
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
