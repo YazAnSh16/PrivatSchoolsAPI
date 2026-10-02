@@ -5,6 +5,7 @@ using Application.Features.Students.Queries.GetAllStudents;
 using Application.Features.Students.Queries.GetStudentById;
 using Application.Features.Students.Queries.GetStudentSummeryById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PrivatSchoolsAPI.API.Requests.Student;
 
@@ -24,6 +25,8 @@ namespace PrivatSchoolsAPI.Controllers
 
         private readonly IMediator _mediator;
 
+
+       
 
         /// <summary>
         /// Get all students from the system
@@ -65,7 +68,11 @@ namespace PrivatSchoolsAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
+        /// <summary>
+        /// صفحة إضافة طالب جديد
+        /// </summary>
+        [Authorize]
+        [HttpGet("~/Home/Student/Add")]
         public IActionResult AddStudent()
         {
             return View();

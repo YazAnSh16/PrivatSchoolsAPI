@@ -37,10 +37,6 @@
         return value === null || value === undefined || value === "";
     }
 
-    function orDash(value) {
-        return isEmpty(value) ? "—" : esc(value);
-    }
-
     function formatDate(value) {
         if (isEmpty(value)) return "—";
         var d = new Date(value);
@@ -100,22 +96,13 @@
     };
 
     // ===================== students =====================
+    // summary only: the page never keeps or renders the full student record
     function normalize(s) {
         return {
             id: s.id,
             applicationUserId: s.applicationUserId || "",
             name: s.name || "",
-            birthPlace: s.birthPlace || "",
-            birthDate: s.birthDate || "",
-            address: s.address || "",
-            fatherJob: s.fatherJob || "",
-            motherJob: s.motherJob || "",
-            phoneNumber: s.phoneNumber || "",
-            motherPhone: s.motherPhone || "",
-            fatherPhone: s.fatherPhone || "",
-            homePhone: s.homePhone || "",
-            grade9: s.grade9 || "",
-            grade11: s.grade11 || "",
+            age: ageFrom(s.birthDate),
             profileImageUrl: s.profileImageUrl || "",
         };
     }
@@ -144,10 +131,7 @@
         if (count) count.textContent = "عدد الطلاب: " + state.students.length;
 
         grid.innerHTML = state.students.map(function (s) {
-            var age = ageFrom(s.birthDate);
-            var meta = [age !== null ? age + " سنة" : "", s.grade9 || "", s.grade11 || ""]
-                .filter(Boolean)
-                .join(" · ");
+            var meta = s.age !== null ? s.age + " سنة" : "";
 
             return (
                 '<button type="button" class="student-card' +
@@ -159,10 +143,7 @@
                 '<div class="student-name">' + esc(s.name) + "</div>" +
                 '<div class="student-meta">' + (meta ? esc(meta) : "—") + "</div>" +
                 "</div></div>" +
-                '<div class="student-info">' +
-                "<span><strong>المواليد:</strong> " + orDash(s.birthPlace) + "</span>" +
-                "<span><strong>الهاتف:</strong> " + orDash(s.phoneNumber) + "</span>" +
-                "</div></button>"
+                "</button>"
             );
         }).join("");
     }
@@ -188,49 +169,18 @@
     }
 
     // ===================== student info =====================
-    function detailItem(label, value) {
-        var empty = isEmpty(value);
-        return (
-            '<div class="detail-item">' +
-            "<dt>" + esc(label) + "</dt>" +
-            '<dd class="' + (empty ? "is-empty" : "") + '">' + orDash(value) + "</dd>" +
-            "</div>"
-        );
-    }
-
+    // summary only: name, age and avatar — no private details (address, phones, parents' jobs…)
     function renderPanel(s) {
         var avatar = $("#stu-avatar");
         if (avatar) avatar.innerHTML = avatarHtml(s);
 
-        var age = ageFrom(s.birthDate);
+        var age = s.age;
         var name = $("#stu-name");
         if (name) name.textContent = s.name || "";
 
         var sub = $("#stu-sub");
         if (sub) {
-            sub.textContent = [
-                age !== null ? "العمر: " + age + " سنة" : "",
-                formatDate(s.birthDate) !== "—" ? "تاريخ الميلاد: " + formatDate(s.birthDate) : "",
-            ].filter(Boolean).join(" · ");
-        }
-
-        var details = $("#stu-details");
-        if (details) {
-            details.innerHTML = [
-                detailItem("الاسم", s.name),
-                detailItem("العمر", age !== null ? age + " سنة" : ""),
-                detailItem("تاريخ الميلاد", formatDate(s.birthDate)),
-                detailItem("مكان الميلاد", s.birthPlace),
-                detailItem("العنوان", s.address),
-                detailItem("الصف (9)", s.grade9),
-                detailItem("الصف (11)", s.grade11),
-                detailItem("هاتف الطالب", s.phoneNumber),
-                detailItem("هاتف المنزل", s.homePhone),
-                detailItem("هاتف الأب", s.fatherPhone),
-                detailItem("هاتف الأم", s.motherPhone),
-                detailItem("وظيفة الأب", s.fatherJob),
-                detailItem("وظيفة الأم", s.motherJob),
-            ].join("");
+            sub.textContent = age !== null ? "العمر: " + age + " سنة" : "";
         }
     }
 
